@@ -44,6 +44,9 @@ class Catcher with ReportModeAction {
   /// Should catcher run WidgetsFlutterBinding.ensureInitialized() during initialization.
   final bool ensureInitialized;
 
+  /// Should catcher load DeviceInfo automatically
+  final bool initDeviceInfo;
+
   late CatcherOptions _currentConfig;
   late CatcherLogger _logger;
   late CatcherScreenshotManager screenshotManager;
@@ -67,6 +70,7 @@ class Catcher with ReportModeAction {
     this.profileConfig,
     this.enableLogger = true,
     this.ensureInitialized = false,
+    this.initDeviceInfo = true,
     GlobalKey<NavigatorState>? navigatorKey,
   }) : assert(
           rootWidget != null || runAppFunction != null,
@@ -84,7 +88,9 @@ class Catcher with ReportModeAction {
     _setupReportModeActionInReportMode();
     _setupScreenshotManager();
 
-    _loadDeviceInfo();
+    if (initDeviceInfo) {
+      _loadDeviceInfo();
+    }
     _loadApplicationInfo();
 
     if (_currentConfig.handlers.isEmpty) {
@@ -781,5 +787,9 @@ class Catcher with ReportModeAction {
   ///Get current Catcher instance.
   static Catcher getInstance() {
     return _instance;
+  }
+
+  void loadDeviceInfo() {
+    _loadDeviceInfo();
   }
 }
